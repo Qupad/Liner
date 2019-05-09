@@ -13,7 +13,6 @@ end
 
 def test2
 	url = "https://catalog.onliner.by/"
-
 	open(url, 'User-Agent' => 'google.com, pub-8835043496074756') do |f|
 	puts f.read
 	end
@@ -26,9 +25,7 @@ def valid_json?(string)
 end
 
 def write(href)
-	File.open("valid_api.txt",'a'){ |file| 
-									  file.puts(href)
-								   }	
+	File.open("valid_api.txt",'a'){ |file| file.puts(href) }	
 end
 
 def write_valid
@@ -133,6 +130,7 @@ def parseJson(url)
 end
 
 @count503 = 0
+@inactive_queue = []
 
 def counter503
 	@count503+=1
@@ -140,4 +138,11 @@ def counter503
 	puts "\n\t\t 503 ERRORS OCCURED: #{@count503} PEACES OF SHIT\n"
 end
 
-puts !!("503 Service Temporarily Unavailable" =~ /503/) 
+def queue(url)
+	@inactive_queue.push(url)
+	if @inactive_queue.size > 2
+		return @inactive_queue.shift
+	else
+		return false
+	end
+end
